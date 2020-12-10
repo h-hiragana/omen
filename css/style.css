@@ -42,8 +42,8 @@ body {
 .image-input-content {
   position: absolute;
   left: auto;
-  bottom: 25px;
-  right: 55px;
+  bottom: 20px;
+  right: 20px;
   width: 350px;
   z-index: 1;
 }
