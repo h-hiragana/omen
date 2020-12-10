@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+  <title>デコメン</title>
+
+  <!-- JQuer -->
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <!-- Face API  -->
+  <script src="lib/face-api/face-api.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/mask.js"></script>
+  <script src="js/index.js"></script>
+
+</head>
+
+<body>
+
+  <div id="content">
+
+    <!-- Video -->
+    <video id="video" autoplay playsinline muted></video>
+
+  </div>
+
+  <!-- 画像インプット -->
+  <div class="custom-file image-input-content">
+    <input id="image-input" class="custom-file-input" type="file" custom-file-text="Your label here.">
+    <label class="custom-file-label" for="inputFile" data-browse="マスク変更">画像を選択してください</label>
+  </div>
+
+</body>
+
+</html>
