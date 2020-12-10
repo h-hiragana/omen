@@ -76,7 +76,7 @@ async function detectFaceAsync() {
 function setupCameraStream(completion) {
   if (!videoValidate()) return;
 
-  navigator.mediaDevices.getUserMedia({audio: false, video: {width: 1280, height: 720}}).then((stream) => {
+  navigator.mediaDevices.getUserMedia({audio: false, video: {width: 1280, height: 720, facingMode: 'environment'}}).then((stream) => {
     if (completion) completion(stream);
   }).catch((e) => {
     console.log(e.name + ': ' + e.message);
