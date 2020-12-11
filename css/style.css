@@ -37,6 +37,7 @@ body {
   width: 0;
   height: 0;
   z-index: 2;
+  object-fit: contain;
 }
 
 .image-input-content {

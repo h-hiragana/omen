@@ -20,7 +20,7 @@ $(function() {
   faceapi.nets.faceLandmark68Net.load("lib/face-api/weights/");
 
   // Mask
-  mask = new Mask('mask', './img/anpanman.png', 1.3);
+  mask = new Mask('mask', './img/santa.png', 1.3);
 
   // 画像入力
   document.getElementById('image-input').addEventListener('change', function (e) {
@@ -34,9 +34,8 @@ function update() {
   if (detecting) return;
   detecting = true;
 
-  detectFaceAsync().then(results => {
-    if (results && results.length > 0) {
-      let r = results[0];
+  detectFaceAsync().then(r => {
+    if (r) {
       let v = document.getElementById("video");
       let vw = v.videoWidth;
       let vh = v.videoHeight;
@@ -63,7 +62,7 @@ function update() {
 }
 
 async function detectFaceAsync() {
-  const results = await faceapi.detectAllFaces(
+  const results = await faceapi.detectSingleFace(
     video,
     new faceapi.TinyFaceDetectorOptions({
       inputSize: 224,
