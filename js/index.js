@@ -17,7 +17,6 @@ $(function() {
 
   // Face API
   faceapi.nets.tinyFaceDetector.load("lib/face-api/weights/");
-  faceapi.nets.faceLandmark68Net.load("lib/face-api/weights/");
 
   // Mask
   for (let i = 0; i < 10; i++) {
@@ -28,7 +27,9 @@ $(function() {
   // 画像入力
   document.getElementById('image-input').addEventListener('change', function (e) {
     let fr = new FileReader();
-    fr.addEventListener('load', () => mask.setImage(fr.result));
+    fr.addEventListener('load', () => {
+       masks.forEach(m => m.setImage(fr.result));
+     });
     fr.readAsDataURL(e.srcElement.files[0]);
   });
 });
