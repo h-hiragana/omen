@@ -1,4 +1,4 @@
-let mask = null;
+let masks = [];
 
 let detecting = false;
 
@@ -11,7 +11,7 @@ $(function() {
       video.play();
 
       // Update開始
-      setInterval(update, 10);
+      setInterval(update, 5);
     };
   });
 
@@ -20,7 +20,10 @@ $(function() {
   faceapi.nets.faceLandmark68Net.load("lib/face-api/weights/");
 
   // Mask
-  mask = new Mask('mask', './img/santa.png', 1.3);
+  for (let i = 0; i < 10; i++) {
+    let mask = new Mask('mask' + (i + 1), './img/santa.png', 1.3);
+    masks.push(mask);
+  }
 
   // 画像入力
   document.getElementById('image-input').addEventListener('change', function (e) {
@@ -34,27 +37,48 @@ function update() {
   if (detecting) return;
   detecting = true;
 
-  detectFaceAsync().then(r => {
-    if (r) {
-      let v = document.getElementById("video");
-      let vw = v.videoWidth;
-      let vh = v.videoHeight;
+  detectFaceAsync().then(results => {
+    if (results.length > 0) {
+      let lostMasks = masks.concat();
+      results.forEach(r => {
+        let v = document.getElementById("video");
+        let vw = v.videoWidth;
+        let vh = v.videoHeight;
 
-      if (window.innerWidth > window.innerHeight * vw / vh) {
-        let s = window.innerHeight / vh;
-        let mx = (window.innerWidth - vw * s) / 2;
+        if (window.innerWidth > window.innerHeight * vw / vh) {
+          let s = window.innerHeight / vh;
+          let mx = (window.innerWidth - vw * s) / 2;
 
-        // Mask Update
-        mask.update(r._box.x * s + mx, r._box.y * s, r._box.width * s, r._box.height * s);
-      } else {
-        let s = window.innerWidth / vw;
-        let my = (window.innerHeight - vh * s) / 2;
+          let x = r._box.x * s + mx;
+          let y = r._box.y * s;
+          let w = r._box.width * s;
+          let h = r._box.height * s;
 
-        // Mask Update
-        mask.update(r._box.x * s, r._box.y * s + my, r._box.width * s, r._box.height * s);
-      }
+          let mask = lostMasks.sort((m1, m2) => m1.dist(x, y, w, h) - m2.dist(x, y, w, h))[0];
+          lostMasks.shift();
+
+          // Mask Update
+          mask.update(x, y, w, h);
+        } else {
+          let s = window.innerWidth / vw;
+          let my = (window.innerHeight - vh * s) / 2;
+
+          let x = r._box.x * s;
+          let y = r._box.y * s + my;
+          let w = r._box.width * s;
+          let h = r._box.height * s;
+
+          let mask = lostMasks.sort((m1, m2) => m1.dist(x, y, w, h) - m2.dist(x, y, w, h))[0];
+          lostMasks.shift();
+
+          // Mask Update
+          mask.update(x, y, w, h);
+        }
+      });
+
+      lostMasks.forEach(m => m.hide());
     } else {
-      mask.hide();
+      masks.forEach(m => m.hide());
     }
 
     detecting = false;
@@ -62,7 +86,7 @@ function update() {
 }
 
 async function detectFaceAsync() {
-  const results = await faceapi.detectSingleFace(
+  const results = await faceapi.detectAllFaces(
     video,
     new faceapi.TinyFaceDetectorOptions({
       inputSize: 224,

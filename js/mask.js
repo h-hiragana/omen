@@ -6,11 +6,7 @@ class Mask {
     this.dataList = [];
     this.hideCount = 0;
 
-    let imgNode = document.createElement('img');
-    imgNode.id = id;
-    imgNode.classList.add('mask');
-    imgNode.src = img;
-    $('#content').append(imgNode);
+    $('#content').append('<img id="' + id +'" class="mask" src="' + img +'"></img>');
   }
 
   setImage(img) {
@@ -52,10 +48,20 @@ class Mask {
   }
 
   hide() {
-    if (this.hideCount > 10) {
+    if (this.hideCount > 10 || this.dataList.length < 5) {
       this.dataList = [];
       $('#' + this.id).hide();
     }
     this.hideCount++;
+  }
+
+  dist(x, y, width, height) {
+    if (this.dataList.length > 0) {
+      let d = this.dataList[this.dataList.length - 1];
+      let sx = (x + width * 0.5) - (d.x + d.width * 0.5);
+      let sy = (y + height * 0.5) - (d.y + d.height * 0.5);
+      return Math.sqrt(sx * sx + sy * sy);
+    }
+    return 9999;
   }
 }
