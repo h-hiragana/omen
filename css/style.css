@@ -45,6 +45,7 @@ body {
   left: auto;
   bottom: 20px;
   right: 20px;
-  width: 350px;
+  width: 250px;
   z-index: 1;
+  font-size: 12px;
 }
