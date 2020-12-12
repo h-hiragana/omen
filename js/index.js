@@ -91,7 +91,7 @@ async function detectFaceAsync() {
     video,
     new faceapi.TinyFaceDetectorOptions({
       inputSize: 224,
-      scoreThreshold: 0.1
+      scoreThreshold: 0.5
     })
   );
   return results;
